@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>D'Vine Healthcare</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"/>
+  <link rel="stylesheet" href="index.css"/>
+  <script type="module" src="Firebaseauth.js"></script>
+</head>
+<body>
+
+<!-- Register Form -->
+<div class="container" id="signup" style="display: none;">
+  <h1 class="form-title">Register</h1>
+  <form id="registerForm">
+    
+    <!-- User ID -->
+    <div class="input-group">
+      <i class="fas fa-id-card"></i>
+      <input type="text" name="user_id" id="reg-user-id" placeholder="Enter User ID" required />
+      <label for="reg-user-id"></label>
+    </div>
+
+    <!-- Username -->
+    <div class="input-group">
+      <i class="fas fa-user-circle"></i>
+      <input type="text" name="username" id="reg-username" placeholder="Enter Username" required />
+      <label for="reg-username"></label>
+    </div>
+
+    <!-- Email -->
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" name="email" id="reg-email" placeholder="Enter Email" required />
+      <label for="reg-email"></label>
+    </div>
+
+    <!-- Mobile -->
+    <div class="input-group">
+      <i class="fas fa-phone"></i>
+      <input type="tel" name="mobile" id="reg-mobile" placeholder="Enter Mobile Number" pattern="[0-9]{10}" required />
+      <label for="reg-mobile"></label>
+    </div>
+
+    <!-- Password -->
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" name="password" id="reg-password" placeholder="Enter Password" required />
+      <label for="reg-password"></label>
+    </div>
+
+    <input type="submit" class="btn" value="Sign Up" />
+  </form>
+
+  <div class="link">
+    <p>Already have an account?</p>
+    <button id="signinbutton">Login</button>
+  </div>
+</div>
+
+<!-- Login Form -->
+<div class="container" id="signin">
+  <h1 class="form-title">Login</h1>
+  <form id="loginForm">
+    
+    <!-- User ID -->
+    <div class="input-group">
+      <i class="fas fa-id-card"></i>
+      <input type="text" name="user_id" id="login-user-id" placeholder="Enter User ID" required />
+      <label for="login-user-id"></label>
+    </div>
+
+    <!-- Email -->
+    <div class="input-group">
+      <i class="fas fa-envelope"></i>
+      <input type="email" name="email" id="login-email" placeholder="Enter Email" required />
+      <label for="login-email"></label>
+    </div>
+
+    <!-- Password -->
+    <div class="input-group">
+      <i class="fas fa-lock"></i>
+      <input type="password" name="password" id="login-password" placeholder="Enter Password" required />
+      <label for="login-password"></label>
+    </div>
+
+    <input type="submit" class="btn" value="Login" />
+  </form>
+
+  <div class="link">
+    <p>Don't have an account?</p>
+    <button id="signupbutton">Sign Up</button>
+  </div>
+</div>
+
+<!-- Top-right logo -->
+  <div class="top-logo">
+    <img src="D'Vine Healthcare - Logo - Final-01.png" alt="D'vine Healthcare Logo">
+  </div>
+
+<script src="index.js"></script>
+</body>
+</html>

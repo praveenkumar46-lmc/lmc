@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>D'vine Healthcare - Test</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css">
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f6f9;
+      padding-bottom: 60px;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(to bottom, #2225d6, #3f5efb);
+      height: 100vh;
+      color: white;
+      padding-top: 30px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      display: flex;
+      flex-direction: column;
+      z-index: 999;
+    }
+
+    .sidebar a {
+      padding: 15px 20px;
+      text-decoration: none;
+      color: white;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .container {
+      margin-left: 350px;
+      padding: 40px 20px;
+      max-width: 800px;
+      width: 100%;
+    }
+
+    h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .question {
+      background: #fff;
+      padding: 20px;
+      margin: 15px 0;
+      border-radius: 10px;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    }
+
+    .question p {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    select, button {
+      display: block;
+      margin: 20px auto;
+      padding: 10px;
+      border-radius: 8px;
+      border: 1px solid #ccc;
+      width: 100%;
+      max-width: 300px;
+      font-size: 16px;
+    }
+
+    button {
+      background: green;
+      color: white;
+      border: none;
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: #5eba61;
+    }
+
+    #result {
+      text-align: center;
+      font-size: 18px;
+      margin-top: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        position: fixed;
+        bottom: 0;
+        top: auto;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: center;
+        padding: 0;
+      }
+
+      .sidebar a {
+        flex-direction: column;
+        padding: 8px 0;
+        font-size: 14px;
+      }
+
+      .container {
+        margin-left: 0;
+        padding: 20px 15px;
+      }
+
+      body {
+        padding-bottom: 80px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar">
+    <a href="dashboard.html"><i class="fas fa-home"></i><span>Home</span></a>
+    <a href="test.html"><i class="fas fa-vial"></i><span>Test</span></a>
+    <a href="profile.html"><i class="fas fa-user"></i><span>Profile</span></a>
+  </nav>
+
+  <!-- Main Quiz Content -->
+  <div class="container">
+    <h2>Mock Test</h2>
+    <select id="testSelector">
+      <option value="test1">Test 1</option>
+      <option value="test2">Test 2</option>
+    </select>
+    <form id="quizForm">
+      <div id="questionsContainer"></div>
+      <button type="submit">Submit Quiz</button>
+    </form>
+    <div id="result"></div>
+  </div>
+
+  <!-- Firebase & Quiz Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getFirestore, doc, setDoc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR2uFqndXNM2Gehaujn3ftgY0_MMj-_B8",
+      authDomain: "login-page-37267.firebaseapp.com",
+      projectId: "login-page-37267",
+      storageBucket: "login-page-37267.appspot.com",
+      messagingSenderId: "819577914476",
+      appId: "1:819577914476:web:938af00a536c620ce5c449"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const auth = getAuth(app);
+
+    const testSelector = document.getElementById("testSelector");
+    const questionsContainer = document.getElementById("questionsContainer");
+    const quizForm = document.getElementById("quizForm");
+    const resultDiv = document.getElementById("result");
+    let currentUser = null;
+
+    const quizData = {
+      test1: {
+        title: "Test 1",
+        questions: [
+          { q: "What is the capital of India?", options: ["Delhi", "Mumbai", "Chennai"], answer: "Delhi" },
+          { q: "2 + 2 = ?", options: ["3", "4", "5"], answer: "4" },
+          { q: "HTML stands for?", options: ["Hot Mail", "Hyper Text Markup Language", "How to Make Layouts"], answer: "Hyper Text Markup Language" }
+        ]
+      },
+      test2: {
+        title: "Test 2",
+        questions: [
+          { q: "Which planet is known as the Red Planet?", options: ["Earth", "Mars", "Jupiter"], answer: "Mars" },
+          { q: "CSS stands for?", options: ["Cascading Style Sheets", "Computer Style Sheets", "Colorful Style Sheets"], answer: "Cascading Style Sheets" },
+          { q: "3 * 3 = ?", options: ["6", "9", "12"], answer: "9" }
+        ]
+      }
+    };
+
+    function renderQuestions(testId) {
+      const test = quizData[testId];
+      questionsContainer.innerHTML = "";
+      quizForm.reset();
+      test.questions.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.className = "question";
+        div.innerHTML = `<p>${i + 1}. ${q.q}</p>` +
+          q.options.map(opt => `
+            <label><input type="radio" name="q${i}" value="${opt}"> ${opt}</label>
+          `).join("");
+        questionsContainer.appendChild(div);
+      });
+    }
+
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        const snap = await getDoc(doc(db, "users", user.uid));
+        if (snap.exists()) {
+          currentUser = { uid: user.uid, email: user.email, ...snap.data() };
+          testSelector.dispatchEvent(new Event("change"));
+        } else {
+          alert("User profile not found.");
+          window.location.href = "index.html";
+        }
+      } else {
+        alert("Please login to take the test.");
+        window.location.href = "index.html";
+      }
+    });
+
+    testSelector.addEventListener("change", async () => {
+      const testId = testSelector.value;
+      questionsContainer.innerHTML = "";
+      resultDiv.innerHTML = "";
+      quizForm.style.display = "none";
+      if (!currentUser) return;
+
+      const resultDoc = await getDoc(doc(db, "quiz_results", currentUser.username));
+      if (resultDoc.exists() && resultDoc.data().testResults?.[testId]) {
+        const data = resultDoc.data().testResults[testId];
+        const test = quizData[testId];
+        resultDiv.innerHTML = `
+          <h3>✅ You already completed ${test.title}.</h3>
+          <p><strong>Score:</strong> ${data.score}/${test.questions.length}</p>
+          <p><strong>Percentage:</strong> ${data.percentage}%</p>
+          ${data.percentage >= 75 ? "<span style='color:green;'>🎉 Passed</span>" : "<span style='color:red;'>❌ Failed</span>"}
+        `;
+      } else {
+        renderQuestions(testId);
+        quizForm.style.display = "block";
+      }
+    });
+
+    quizForm.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const testId = testSelector.value;
+      const test = quizData[testId];
+      if (!currentUser) return alert("Please login.");
+
+      const username = currentUser.username;
+      const resultRef = doc(db, "quiz_results", username);
+      const resultSnap = await getDoc(resultRef);
+      const existingData = resultSnap.exists() ? resultSnap.data() : {};
+
+      if (existingData.testResults?.[testId]) {
+        alert("⚠️ You already submitted this test.");
+        return;
+      }
+
+      let score = 0;
+      test.questions.forEach((q, i) => {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (selected?.value === q.answer) score++;
+      });
+
+      const percentage = ((score / test.questions.length) * 100).toFixed(2);
+      const updatedData = {
+        username,
+        email: currentUser.email,
+        mobile: currentUser.mobile || "",
+        testResults: {
+          ...(existingData.testResults || {}),
+          [testId]: { score, percentage, date: new Date().toLocaleDateString() }
+        }
+      };
+
+      await setDoc(resultRef, updatedData);
+      resultDiv.innerHTML = `
+        <p><strong>Test:</strong> ${test.title}</p>
+        <p><strong>Score:</strong> ${score}/${test.questions.length}</p>
+        <p><strong>Percentage:</strong> ${percentage}%</p>
+        ${percentage >= 75 ? "<span style='color:green;'>🎉 Passed</span>" : "<span style='color:red;'>❌ Failed</span>"}
+      `;
+      alert("✅ Result saved.");
+      quizForm.style.display = "none";
+    });
+
+    window.addEventListener("load", () => {
+      testSelector.dispatchEvent(new Event("change"));
+    });
+  </script>
+</body>
+</html>

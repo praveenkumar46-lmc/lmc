@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Admin Panel - Register User</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      padding: 50px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .container {
+      background: #fff;
+      padding: 30px 40px;
+      border-radius: 10px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      width: 100%;
+      max-width: 450px;
+    }
+
+    .container h2 {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      margin-bottom: 15px;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+    }
+
+    .input-group input,
+    .input-group select {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #2274a5;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+
+    .message {
+      text-align: center;
+      color: red;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container" id="admin-register" style="display: none;">
+  <h2>Admin - Register New User</h2>
+  <form id="register-form">
+    <div class="input-group">
+      <label for="userId">User ID</label>
+      <input type="text" id="userId" required>
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email</label>
+      <input type="email" id="email" required>
+    </div>
+
+    <div class="input-group">
+      <label for="mobile">Mobile Number</label>
+      <input type="tel" id="mobile" required pattern="[0-9]{10}">
+    </div>
+
+    <div class="input-group">
+      <label for="password">Password</label>
+      <input type="password" id="password" required>
+    </div>
+
+    <div class="input-group">
+      <label for="role">Role</label>
+      <select id="role" required>
+        <option value="">-- Select Role --</option>
+        <option value="user">User</option>
+        <option value="admin">Admin</option>
+      </select>
+    </div>
+
+    <button type="submit">Register</button>
+  </form>
+</div>
+
+<div class="container message" id="not-allowed" style="display: none;">
+  <h3>Access Denied</h3>
+  <p>Only admins can register new users.</p>
+</div>
+
+<script>
+  // 🔐 Simulated admin check
+  const isAdmin = true; // Change to false to test non-admin access
+
+  if (isAdmin) {
+    document.getElementById("admin-register").style.display = "block";
+  } else {
+    document.getElementById("not-allowed").style.display = "block";
+  }
+
+  // 💾 Handle form submission
+  document.getElementById("register-form").addEventListener("submit", function(e) {
+    e.preventDefault();
+    const userId = document.getElementById("userId").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const mobile = document.getElementById("mobile").value.trim();
+    const password = document.getElementById("password").value.trim();
+    const role = document.getElementById("role").value;
+
+    const userData = {
+      userId, email, mobile, password, role
+    };
+
+    alert("✅ User Registered:\n" + JSON.stringify(userData, null, 2));
+    this.reset();
+  });
+</script>
+
+</body>
+</html>

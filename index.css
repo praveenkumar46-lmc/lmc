@@ -1,0 +1,115 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #f5f5f5;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+
+.container {
+  background-color: white;
+  width: 100%;
+  max-width: 400px;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.form-title {
+  font-size: 1.8rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+.input-group {
+  position: relative;
+  margin-bottom: 1.2rem;
+}
+
+.input-group i {
+  position: absolute;
+  top: 12px;
+  left: 10px;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 10px 10px 10px 35px;
+  font-size: 14px;
+  border: none;
+  border-bottom: 2px solid #ccc;
+  background-color: transparent;
+  transition: border-color 0.3s ease;
+}
+
+.input-group input:focus {
+  border-bottom: 2px solid green;
+  outline: none;
+}
+
+label {
+  font-size: 14px;
+  color: #777;
+  margin-left: 35px;
+}
+
+.btn {
+  width: 100%;
+  padding: 12px;
+  font-size: 16px;
+  background-color: green;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.btn:hover {
+  background-color: darkgreen;
+}
+
+.link {
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.link button {
+  background: none;
+  border: none;
+  color: green;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.link button:hover {
+  text-decoration: underline;
+}
+
+.top-logo {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+
+.top-logo img {
+  height: 40px;
+  width: auto;
+}
+
+/* Responsive */
+@media (max-width: 480px) {
+  .container {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+}

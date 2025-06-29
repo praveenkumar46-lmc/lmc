@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>User Profile</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: #f4f4f4;
+      min-height: 100vh;
+    }
+
+    .sidebar {
+      width: 220px;
+      background: linear-gradient(to bottom, #2225d6);
+      height: 100vh;
+      color: white;
+      padding-top: 30px;
+      position: fixed;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sidebar a {
+      padding: 15px 20px;
+      color: white;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: background 0.3s;
+    }
+
+    .sidebar a:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    .main-content {
+      margin-left: 220px;
+      width: calc(100% - 220px);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+
+    .profile-container {
+      background: #fff;
+      display: flex;
+      flex-wrap: wrap;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .profile-left {
+      background: linear-gradient(to bottom, #a5a5b8);
+      color: white;
+      flex: 1;
+      padding: 30px;
+      text-align: center;
+    }
+
+    .profile-left img {
+      border-radius: 50%;
+      width: 100px;
+      margin-bottom: 15px;
+    }
+
+    .profile-right {
+      flex: 2;
+      padding: 30px;
+    }
+
+    .info-section {
+      margin-bottom: 20px;
+    }
+
+    .info-section h3 {
+      margin-bottom: 10px;
+      color: #333;
+      border-bottom: 1px solid #ccc;
+      padding-bottom: 5px;
+      text-align: center;
+    }
+
+    .info-row {
+      display: flex;
+      justify-content: space-between;
+      margin: 10px 0;
+      font-size: 16px;
+    }
+
+    .info-label {
+      font-weight: bold;
+      color: #555;
+    }
+
+    .bottom-nav {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        display: none;
+      }
+
+      .main-content {
+        margin: 0;
+        width: 100%;
+        padding: 20px;
+        padding-bottom: 100px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      .profile-container {
+        flex-direction: column;
+        margin-top: 20px;
+      }
+
+      .profile-left, .profile-right {
+        padding: 20px;
+      }
+
+      .info-row {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .bottom-nav {
+        display: flex;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: linear-gradient(to bottom, #2225d6);
+        justify-content: space-around;
+        align-items: center;
+        padding: 10px 0;
+        z-index: 999;
+      }
+
+      .bottom-nav a {
+        color: white;
+        text-decoration: none;
+        text-align: center;
+        font-size: 14px;
+      }
+
+      .bottom-nav i {
+        font-size: 18px;
+        display: block;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar for Desktop -->
+  <nav class="sidebar">
+    <a href="dashboard.html"><i class="fas fa-home"></i> Home</a>
+    <a href="test.html"><i class="fas fa-vial"></i> Test</a>
+    <a href="profile.html"><i class="fas fa-user"></i> Profile</a>
+    <a href="index.html"><i class="fas fa-sign-out-alt"></i> Logout</a>
+  </nav>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="profile-container">
+      <div class="profile-left">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile Pic" />
+        <h2 id="username">Loading...</h2>
+        <p>User</p>
+      </div>
+      <div class="profile-right">
+        <div class="info-section">
+          <h3>Information</h3>
+          <div class="info-row"><span class="info-label">Email:</span> <span id="email">-</span></div>
+          <div class="info-row"><span class="info-label">Phone:</span> <span id="mobile">-</span></div>
+          <div class="info-row"><span class="info-label">User ID:</span> <span id="userid">-</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bottom Navigation (Mobile Only) -->
+  <div class="bottom-nav">
+    <a href="dashboard.html"><i class="fas fa-home"></i>Home</a>
+    <a href="test.html"><i class="fas fa-vial"></i>Test</a>
+    <a href="profile.html"><i class="fas fa-user"></i>Profile</a>
+    <a href="index.html"><i class="fas fa-sign-out-alt"></i>Logout</a>
+  </div>
+
+  <!-- Firebase Logic -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-app.js";
+    import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-auth.js";
+    import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.9.1/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyCR2uFqndXNM2Gehaujn3ftgY0_MMj-_B8",
+      authDomain: "login-page-37267.firebaseapp.com",
+      projectId: "login-page-37267",
+      storageBucket: "login-page-37267.appspot.com",
+      messagingSenderId: "819577914476",
+      appId: "1:819577914476:web:938af00a536c620ce5c449"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const auth = getAuth(app);
+    const db = getFirestore(app);
+
+    onAuthStateChanged(auth, async (user) => {
+      if (!user) {
+        window.location.href = "index.html";
+        return;
+      }
+
+      const docSnap = await getDoc(doc(db, "users", user.uid));
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("username").textContent = data.username || "Unknown";
+        document.getElementById("email").textContent = user.email;
+        document.getElementById("mobile").textContent = data.mobile || "-";
+        document.getElementById("userid").textContent = data.userId || "-";
+      } else {
+        alert("No user profile found.");
+      }
+    });
+  </script>
+</body>
+</html>
